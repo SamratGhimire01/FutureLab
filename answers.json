@@ -1,0 +1,94 @@
+{
+ "w1d2": {
+  "ref": "#!/bin/bash\nset -euo pipefail\nsrc=\"$1\"; dest=\"${2:-$HOME/backups}\"\nmkdir -p \"$dest\"\ncp -R \"$src\" \"$dest/$(basename \"$src\")-$(date +%F)\"\necho \"backed up $src\"",
+  "check": "It must stop on the first error (set -e / pipefail), quote variables, and put today's date in the backup name."
+ },
+ "w1d5": {
+  "ref": "# top 5 IPs (IP is the first column in common web logs)\nawk '{print $1}' access.log | sort | uniq -c | sort -nr | head -5\n# top 5 error messages\ngrep -i error app.log | sed -E 's/^[^ ]+ [^ ]+ //' | sort | uniq -c | sort -nr | head -5",
+  "check": "Exact commands depend on the log format; accept any correct pipeline that counts, sorts descending and takes 5."
+ },
+ "w1d6": {
+  "ref": "#!/bin/bash\nset -euo pipefail\n{ date; df -h /; vm_stat | head -5; ps aux | sort -nrk 3 | head -6; } >> \"$HOME/system_report.txt\"\n# schedule: cron  0 2 * * *  /path/to/report.sh   (or a launchd plist on Mac)",
+  "check": "Needs disk, memory and top-5 processes written to a file, plus a working schedule."
+ },
+ "w4d5": {
+  "ref": "tar czf \"backup-$(date +%F).tar.gz\" -C /srv/app .\nmkdir -p /tmp/restore && tar xzf backup-*.tar.gz -C /tmp/restore\ndiff -r /srv/app /tmp/restore && echo \"restore verified\"",
+  "check": "The restore must be tested and compared, not only the backup made."
+ },
+ "w5d2": {
+  "ref": "SELECT u.id, u.name, COUNT(s.id) AS sessions\nFROM users u\nLEFT JOIN sessions s ON s.user_id = u.id\nGROUP BY u.id, u.name\nORDER BY sessions DESC;",
+  "check": "LEFT JOIN (so users with zero sessions still appear) and a correct GROUP BY are the key points."
+ },
+ "w5d4": {
+  "ref": "CREATE INDEX idx_sessions_user_id ON sessions (user_id);\nEXPLAIN ANALYZE SELECT * FROM sessions WHERE user_id = 42;\n-- before: Seq Scan; after the index: Index Scan / Bitmap Index Scan with a much lower time",
+  "check": "They must show a before and after plan, not just create the index."
+ },
+ "w5d5": {
+  "ref": "BEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;  -- make this step fail on purpose (e.g. a CHECK constraint)\nROLLBACK;  -- or the error aborts it\nSELECT balance FROM accounts WHERE id = 1;  -- unchanged: the first step was undone",
+  "check": "The proof is that the first update is rolled back after the second fails."
+ },
+ "w5d6": {
+  "ref": "def contains_duplicate(nums): return len(set(nums)) != len(nums)\nfrom collections import Counter\ndef is_anagram(s, t): return Counter(s) == Counter(t)\ndef two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        if target - n in seen: return [seen[target - n], i]\n        seen[n] = i",
+  "check": "O(n) time using a set, a counter and a hash map."
+ },
+ "w6d1": {
+  "ref": "from fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\napp = FastAPI()\nclass Course(BaseModel):\n    name: str\n    hours: int = 0\ndb: dict[int, Course] = {}\n@app.post(\"/courses\", status_code=201)\ndef create(c: Course):\n    i = len(db) + 1; db[i] = c; return {\"id\": i, **c.model_dump()}\n@app.get(\"/courses/{i}\")\ndef read(i: int):\n    if i not in db: raise HTTPException(404, \"not found\")\n    return db[i]\n@app.put(\"/courses/{i}\")\ndef update(i: int, c: Course):\n    if i not in db: raise HTTPException(404, \"not found\")\n    db[i] = c; return c\n@app.delete(\"/courses/{i}\", status_code=204)\ndef delete(i: int):\n    if db.pop(i, None) is None: raise HTTPException(404, \"not found\")",
+  "check": "Five endpoints: list, get, create, update, delete; typed body; 404 on missing."
+ },
+ "w6d4": {
+  "ref": "from fastapi.testclient import TestClient\nfrom app import app\nclient = TestClient(app)\ndef test_create_then_get():\n    r = client.post(\"/courses\", json={\"name\": \"SQL\", \"hours\": 3}); assert r.status_code == 201\n    assert client.get(f\"/courses/{r.json()['id']}\").json()[\"name\"] == \"SQL\"\ndef test_missing_is_404(): assert client.get(\"/courses/9999\").status_code == 404\ndef test_bad_body_is_422(): assert client.post(\"/courses\", json={\"hours\": \"x\"}).status_code == 422",
+  "check": "At least 10 tests overall, including failure cases, not only happy paths."
+ },
+ "w6d5": {
+  "ref": "from argon2 import PasswordHasher\nph = PasswordHasher()\nhashed = ph.hash(password)          # store this, never the password\nph.verify(hashed, attempt)          # raises on a wrong password\n# same error message for 'wrong user' and 'wrong password'; tokens expire",
+  "check": "Slow salted hash (Argon2id or bcrypt), no plain text, expiring tokens, generic errors."
+ },
+ "w7d1": {
+  "ref": "import asyncio, httpx, time\nasync def fetch(c, u): return (await c.get(u)).status_code\nasync def main(urls):\n    async with httpx.AsyncClient() as c:\n        return await asyncio.gather(*(fetch(c, u) for u in urls))\nt = time.time(); asyncio.run(main(urls)); print(\"concurrent:\", time.time() - t)",
+  "check": "Must compare against a sequential version and show concurrent is faster."
+ },
+ "w7d3": {
+  "ref": "@app.post(\"/sessions\")\ndef create_session(body: SessionIn, idempotency_key: str = Header(...)):\n    row = db.execute(\"SELECT id FROM sessions WHERE idem_key = %s\", (idempotency_key,)).fetchone()\n    if row: return {\"id\": row[0], \"replayed\": True}\n    # INSERT ... with a UNIQUE constraint on idem_key; on unique violation re-select and return that row",
+  "check": "A unique constraint on the key is essential: a check-then-insert alone has a race."
+ },
+ "w7d5": {
+  "ref": "import random, time\ndef call_with_retry(fn, tries=5, base=0.2, cap=5.0):\n    for n in range(tries):\n        try: return fn()\n        except Exception:\n            if n == tries - 1: raise\n            time.sleep(random.uniform(0, min(cap, base * 2 ** n)))   # exponential backoff with full jitter",
+  "check": "Needs a timeout on the call, a retry limit, exponential backoff and random jitter."
+ },
+ "w9d3": {
+  "ref": "def is_palindrome(s):\n    t = [c.lower() for c in s if c.isalnum()]\n    i, j = 0, len(t) - 1\n    while i < j:\n        if t[i] != t[j]: return False\n        i += 1; j -= 1\n    return True\ndef two_sum_sorted(a, target):\n    i, j = 0, len(a) - 1\n    while i < j:\n        s = a[i] + a[j]\n        if s == target: return [i + 1, j + 1]\n        if s < target: i += 1\n        else: j -= 1\nfrom collections import defaultdict\ndef group_anagrams(strs):\n    d = defaultdict(list)\n    for s in strs: d[tuple(sorted(s))].append(s)\n    return list(d.values())",
+  "check": "Two pointers in O(n); anagram grouping by sorted key."
+ },
+ "w9d4": {
+  "ref": "def is_valid(s):\n    pairs = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}; st = []\n    for c in s:\n        if c in pairs:\n            if not st or st.pop() != pairs[c]: return False\n        else: st.append(c)\n    return not st\ndef search(nums, target):\n    lo, hi = 0, len(nums) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if nums[mid] == target: return mid\n        if nums[mid] < target: lo = mid + 1\n        else: hi = mid - 1\n    return -1",
+  "check": "Stack for brackets; binary search O(log n) with correct bounds."
+ },
+ "w10d1": {
+  "ref": "import random\nfrom collections import Counter\nn = 10000\nc = Counter(random.randint(1, 6) for _ in range(n))\nprint({k: round(v / n, 3) for k, v in sorted(c.items())})   # each close to 0.167",
+  "check": "Compare the simulated frequencies with the theory (1/6, 1/2)."
+ },
+ "w10d4": {
+  "ref": "import numpy as np\nrng = np.random.default_rng(0); x = np.array(data)\nmeans = [rng.choice(x, size=len(x), replace=True).mean() for _ in range(10000)]\nprint(np.percentile(means, [2.5, 97.5]))   # 95% bootstrap interval",
+  "check": "Must resample WITH replacement and take percentiles."
+ },
+ "w10d5": {
+  "ref": "import numpy as np\nrng = np.random.default_rng(0); obs = a.mean() - b.mean(); pool = np.concatenate([a, b]); count = 0\nfor _ in range(10000):\n    rng.shuffle(pool); d = pool[:len(a)].mean() - pool[len(a):].mean(); count += abs(d) >= abs(obs)\nprint(\"p =\", count / 10000)",
+  "check": "Shuffle the group labels, compare how often chance beats the observed difference."
+ },
+ "w11d5": {
+  "ref": "import numpy as np\nX = np.c_[np.ones(len(x)), x]; w = np.zeros(2); lr = 0.01\nfor _ in range(5000):\n    grad = 2 / len(y) * X.T @ (X @ w - y)\n    w -= lr * grad\nprint(w)   # should match sklearn LinearRegression closely",
+  "check": "They must compare against scikit-learn's result; a sensible learning rate (not diverging)."
+ },
+ "w15d1": {
+  "ref": "for step in range(MAX_STEPS):\n    resp = call_model(messages, tools)\n    messages.append(resp.as_message())\n    calls = resp.tool_calls\n    if not calls: return resp.text            # final answer\n    for c in calls:\n        result = run_tool(c.name, c.args)     # validate args, timeout, catch errors\n        messages.append(tool_result_message(c.id, result))\nraise RuntimeError(\"step limit reached\")",
+  "check": "Must have a hard step limit, validate tool arguments and return errors to the model instead of crashing."
+ },
+ "w18d3": {
+  "ref": "import csv, json, subprocess, time\ncases = json.load(open(\"golden.json\"))\nrows = []\nfor c in cases:\n    out = run_agent(c[\"input\"])\n    rows.append({\"id\": c[\"id\"], \"pass\": check(out, c), \"model\": MODEL, \"commit\": git_commit(), \"ts\": time.time()})\ncsv.DictWriter(open(\"results.csv\", \"w\", newline=\"\"), rows[0].keys()).writeheader()  # then writerows(rows)\nprint(sum(r[\"pass\"] for r in rows), \"/\", len(rows))",
+  "check": "One command runs all cases; deterministic checks first; results stored with model and commit."
+ },
+ "w19d1": {
+  "ref": "def wilson(k, n, z=1.96):\n    p = k / n; d = 1 + z * z / n\n    c = (p + z * z / (2 * n)) / d\n    m = z * ((p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5) / d\n    return c - m, c + m\nprint(wilson(18, 20))   # about (0.70, 0.97): 18/20 is not exactly 90%",
+  "check": "Interval must widen when n is small."
+ }
+}

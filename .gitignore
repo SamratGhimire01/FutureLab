@@ -1,0 +1,11 @@
+# never commit these: your private data, local settings, caches, the built app
+progress.json
+progress.json.bak
+*.local.json
+*.tmp
+*.bak
+__pycache__/
+server.log
+.DS_Store
+Future Lab.app/
+.claude/

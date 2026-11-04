@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Future Lab</title>
+<style>
+:root{--bg:#e9ebee;--panel:#f3f4f4;--card:#fff;--ink:#101513;--mute:#8b9490;--line:#e6e9e8;--g1:#0d4d33;--g2:#1c8454;--g3:#7fc7a1;--g4:#dcefe5;--amber:#d99a2b;--red:#d9604f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Plus Jakarta Sans",Manrope,"SF Pro Display",system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--g2)}
+.frame{max-width:1360px;margin:26px auto;background:#fff;border-radius:34px;padding:14px;display:grid;grid-template-columns:218px 1fr;gap:12px;box-shadow:0 24px 60px rgba(20,30,25,.08)}
+.side{background:var(--panel);border-radius:24px;padding:20px 14px 14px;display:flex;flex-direction:column;min-height:640px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:20px;padding:0 6px 22px}
+.logo svg{width:30px;height:30px}
+.sec{font-size:12px;color:var(--mute);letter-spacing:.04em;margin:14px 8px 8px}
+.nav a{position:relative;display:flex;align-items:center;gap:12px;padding:9px 8px;margin:1px 0;border-radius:10px;color:#8e9793;text-decoration:none;font-weight:500}
+.nav a:hover{color:var(--ink)}.nav a.on{color:var(--ink);font-weight:700}
+.nav a.on::before{content:"";position:absolute;left:-14px;top:7px;bottom:7px;width:4px;border-radius:0 4px 4px 0;background:var(--g2)}
+.nav a.on svg{color:var(--g2)}.badge{margin-left:auto;background:var(--g1);color:#fff;border-radius:6px;font-size:11px;padding:1px 6px}
+.promo{margin-top:auto;border-radius:20px;padding:16px;color:#fff;background:radial-gradient(circle at 90% 10%,rgba(255,255,255,.14),transparent 45%),repeating-radial-gradient(circle at 85% 95%,rgba(255,255,255,.07) 0 2px,transparent 2px 10px),linear-gradient(145deg,#0b3d28,#1a7a4b)}
+.promo b{font-size:15px;display:block;line-height:1.25}.promo .s{font-size:11px;opacity:.75;margin:4px 0 12px}
+.main{display:flex;flex-direction:column;gap:12px;min-width:0}
+.top{background:var(--panel);border-radius:24px;padding:10px 14px;display:flex;align-items:center;gap:10px}
+.search{flex:0 1 330px;display:flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:10px 14px;color:var(--mute)}
+.search input{border:0;outline:0;flex:1;font:inherit;background:transparent;min-width:0}
+kbd{background:#ececec;border-radius:6px;padding:1px 7px;font-size:11px;color:#6b7470;font-family:inherit}
+.sp{flex:1}.ibtn{width:42px;height:42px;border-radius:50%;background:#fff;display:grid;place-items:center;border:0;color:#333;cursor:pointer}
+.who{display:flex;align-items:center;gap:10px}.av{width:42px;height:42px;border-radius:50%;background:linear-gradient(145deg,var(--g3),var(--g2));display:grid;place-items:center;color:#fff;font-weight:700}
+.who b{display:block;font-size:14px;line-height:1.15}.who span{font-size:12px;color:var(--mute)}
+.panel{background:var(--panel);border-radius:24px;padding:20px;min-height:560px}
+.head{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}.head h1{margin:0;font-size:36px;line-height:1.1;letter-spacing:-.02em}
+.head p{margin:6px 0 0;color:var(--mute)}.head .act{margin-left:auto;display:flex;gap:10px}
+.btn{border:0;border-radius:999px;padding:12px 22px;font:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn.pri{background:linear-gradient(135deg,#0f5a3a,#1c8454);color:#fff}.btn.out{background:transparent;color:var(--g1);border:1.5px solid var(--g1)}
+.btn.sm{padding:7px 14px;font-size:13px}.btn.soft{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.card{background:var(--card);border-radius:20px;padding:16px;min-width:0}.card h3{margin:0 0 10px;font-size:16px}
+.span2{grid-column:span 2}.dark{color:#fff;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.16),transparent 40%),linear-gradient(145deg,#0c4a31,#1c8454)}
+.stat .t{display:flex;align-items:center;justify-content:space-between;font-weight:600}.stat .n{font-size:46px;font-weight:600;line-height:1.1;margin:10px 0 4px;letter-spacing:-.02em}
+.arrow{width:32px;height:32px;border-radius:50%;border:1.5px solid #222;display:grid;place-items:center;color:#222;text-decoration:none}.dark .arrow{background:#fff;border-color:#fff;color:var(--g1)}
+.chip{display:inline-block;font-size:11px;border-radius:6px;padding:1px 7px;border:1px solid var(--g3);color:var(--g2);background:#fff}.sub{font-size:12px;color:var(--g2)}.dark .sub{color:#b6e7cb}
+.mute{color:var(--mute)}.small{font-size:13px}
+.bars{display:flex;justify-content:space-between;align-items:flex-end;height:170px;gap:6px;padding-top:12px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end;font-size:12px;color:var(--mute);position:relative}
+.pill{width:100%;max-width:40px;border-radius:999px;background:repeating-linear-gradient(135deg,#c9d1cc 0 2px,#eef0ef 2px 7px)}
+.pill.a{background:var(--g3)}.pill.b{background:var(--g2)}.pill.c{background:var(--g1)}.tip{position:absolute;top:-6px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:10px;padding:0 5px;color:var(--ink)}
+.rem .big{font-size:20px;font-weight:700;color:var(--g1);line-height:1.2;margin:6px 0}.rem .btn{width:100%;justify-content:center;margin-top:12px}
+.list .it{display:flex;gap:10px;align-items:center;padding:7px 0;text-decoration:none;color:inherit}
+.dot{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;flex:none}
+.list .it b{display:block;font-size:13px;line-height:1.2}.list .it span{font-size:11px;color:var(--mute)}
+.mem{display:flex;align-items:center;gap:10px;padding:7px 0}.mem .av2{width:34px;height:34px;border-radius:50%;background:var(--g4);color:var(--g1);display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+.mem b{font-size:13px;display:block;line-height:1.15}.mem span{font-size:11px;color:var(--mute)}.st{margin-left:auto;font-size:10px;border-radius:5px;padding:1px 7px;border:1px solid;white-space:nowrap}
+.st.c{color:var(--g2);border-color:var(--g3);background:#eaf6ef}.st.p{color:var(--amber);border-color:#f0cf93;background:#fdf5e6}.st.w{color:var(--red);border-color:#efb3aa;background:#fdeeec}
+.gauge{text-align:center}.gauge svg{width:100%;max-width:230px}.gauge .pc{font-size:44px;font-weight:700;margin-top:-62px;letter-spacing:-.02em}.gauge .l{font-size:12px;color:var(--g2);margin-bottom:10px}
+.legend{display:flex;gap:10px;justify-content:center;font-size:11px;flex-wrap:wrap}.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.timer{color:#fff;text-align:center;background:repeating-radial-gradient(ellipse at 60% 120%,rgba(255,255,255,.08) 0 2px,transparent 2px 9px),linear-gradient(150deg,#0a3a26,#1b7d4e)}
+.timer h3{text-align:left}.timer .tt{font-size:40px;font-weight:600;letter-spacing:.02em;margin:6px 0 10px}.tbtn{width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;display:inline-grid;place-items:center;margin:0 5px}
+.flame{color:#f08a24}.strip{display:flex;gap:4px;margin-top:8px}.strip i{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.22)}.strip i.on{background:#fff}
+.day{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}.day:first-child{border-top:0}
+.day input[type=checkbox]{margin-top:4px;width:19px;height:19px;accent-color:var(--g2);flex:none}.day.done .t{color:var(--mute);text-decoration:line-through}
+.day ul{margin:2px 0 6px 18px;padding:0}.res{color:var(--g2)}
+textarea,input[type=text],input[type=number]{width:100%;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 11px;font:inherit}
+textarea{min-height:76px;resize:vertical}pre{white-space:pre-wrap;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;font:13px/1.5 inherit;margin:8px 0}
+.tag{display:inline-block;padding:1px 9px;border-radius:99px;border:1px solid var(--line);font-size:12px;color:var(--mute);margin-right:6px;background:#fff}.tag.g{color:var(--g2);border-color:var(--g3)}.tag.w{color:var(--amber);border-color:#f0cf93}
+.wk{display:block;padding:12px;border-radius:16px;text-decoration:none;color:var(--ink);background:#fff;border:1.5px solid transparent}.wk.pass{border-color:var(--g3)}.wk.cur{border-color:var(--amber)}
+.g4{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}table{width:100%;border-collapse:collapse}td,th{border-top:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+.cal{display:grid;grid-template-columns:70px repeat(7,1fr);gap:4px;align-items:center;font-size:12px}.cal .c{height:26px;border-radius:7px;background:#eceeed}.cal .c.d{background:var(--g2)}.cal .c.t{background:var(--g1)}.cal .c.r{background:var(--g3)}.cal .c.td{outline:2px solid var(--amber)}
+.idcard{border:2px solid var(--g2);border-radius:20px;padding:22px;max-width:480px;background:#fff}.idcard.lock{opacity:.5;border-style:dashed}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--g1);color:#fff;padding:13px 20px;border-radius:14px;font-weight:600;max-width:90vw;display:none;z-index:9;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.chip2{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;font-size:12px;text-decoration:none;border:1px solid var(--g3);background:#fff;color:var(--ink)}.chip2.video{border-color:#efb3aa}.chip2.practice{border-color:#a9c5ee}.chip2:hover{background:#f0f8f3}
+.room{display:grid;grid-template-columns:minmax(330px,440px) minmax(0,1fr);gap:12px;align-items:start}.rl{display:flex;flex-direction:column;gap:10px}
+.res-btn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:9px 11px;font:inherit;color:inherit;cursor:pointer}.res-btn.on{border-color:var(--g2);background:#f0f8f3}
+.ty{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;flex:none;font-size:13px}.ty.read{background:#1c8454}.ty.video{background:#d9604f}.ty.practice{background:#3a7bd5}
+.reader{position:sticky;top:12px;display:flex;flex-direction:column;height:calc(100vh - 36px);min-height:540px;overflow:hidden}.reader iframe{flex:1;border:0;width:100%;min-height:0;background:#fff}
+.bar2{display:flex;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.know label{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer}.know input,.card label input[type=checkbox]{width:18px;height:18px;accent-color:var(--g2);margin-top:2px;flex:none}
+.steps{display:flex;gap:6px}.steps span{flex:1;height:7px;border-radius:5px;background:var(--line)}.steps span.on{background:var(--g2)}
+.conf{position:fixed;top:-16px;width:9px;height:14px;z-index:30;border-radius:2px;animation:fall 2s ease-in forwards;pointer-events:none}@keyframes fall{to{transform:translateY(108vh) rotate(600deg)}}
+@media(max-width:1000px){.room{grid-template-columns:1fr}.reader{position:static;height:75vh}}
+@media(max-width:1000px){.frame{grid-template-columns:1fr;margin:0;border-radius:0}.side{min-height:0}.grid{grid-template-columns:repeat(2,1fr)}.span2{grid-column:span 2}.head h1{font-size:28px}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.span2{grid-column:auto}.search{display:none}}
+</style>
+</head>
+<body>
+<div class="frame">
+  <aside class="side">
+    <div class="logo"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="#1c8454" stroke-width="5"/><circle cx="20" cy="20" r="6" fill="#0d4d33"/></svg>Future Lab</div>
+    <div class="sec">MENU</div><nav class="nav" id="nav1"></nav>
+    <div class="sec">GENERAL</div><nav class="nav" id="nav2"></nav>
+    <div class="promo"><b>Back up to GitHub</b><div class="s" id="ghs">checking...</div><button class="btn sm soft" id="syncbtn" style="width:100%;justify-content:center;background:#0b3d28;color:#fff;border:0">Sync now</button>
+      <div class="s" id="upds" style="margin:12px 0 6px">checking for updates...</div><button class="btn sm soft" id="updbtn" style="width:100%;justify-content:center;background:rgba(255,255,255,.18);color:#fff;border:0">Check for updates</button></div>
+  </aside>
+  <div class="main">
+    <header class="top">
+      <label class="search"><span id="ic-search"></span><input id="q" placeholder="Search task" autocomplete="off"><kbd>&#8984; F</kbd></label>
+      <span class="sp"></span>
+      <a class="ibtn" href="#posts" title="LinkedIn drafts" id="ic-mail"></a><a class="ibtn" href="#tasks" title="Reminders" id="ic-bell"></a>
+      <a class="who" href="#id" style="text-decoration:none;color:inherit"><span class="av" id="av">S</span><div><b id="whoname">Learner</b><span id="wholvl"></span></div></a>
+    </header>
+    <section class="panel" id="view"></section>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="curriculum.js"></script>
+<script src="days_1.js"></script><script src="days_2.js"></script><script src="days_3.js"></script><script src="links.js"></script>
+<script>
+const C = window.CURRICULUM, WK = C.weeks, DAYS = window.DAYS || {}, TOTAL_DAYS = WK.length * 6;
+const PRAISE = ["Done. That is how real skill is built: one honest day at a time.","Good. You did the work, not just watched it.","Another brick placed. Keep the chain going.","Correct move: you finished the hard part instead of skipping it.","That is progress you can show someone.","Quiet, steady, real. This is what separates people who get good."];
+const TESTPASS = ["Gate passed. You proved it, not just read it.","You earned this one. Proof beats feeling.","Passed honestly. Your future self thanks you."];
+const TITLES = [[1,"Newcomer"],[10,"Shell Explorer"],[20,"Server Keeper"],[30,"Data Builder"],[40,"Stats Thinker"],[50,"Model Trainer"],[60,"Agent Builder"],[70,"Evals Engineer"],[80,"Secure Operator"],[90,"Systems Designer"],[100,"AI Engineer"]];
+const IC = {
+ dash:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+ tasks:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>', road:'<path d="M4 6h16M4 12h16M4 18h10"/>',
+ cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>', chart:'<path d="M5 20V10M12 20V4M19 20v-7"/>',
+ notes:'<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h7"/>', post:'<path d="M21 4L3 11l7 3 3 7z"/>',
+ ai:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>', books:'<path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2z"/><path d="M4 21V5"/>',
+ id:'<rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="11" r="2"/><path d="M14 10h4M14 14h4"/>',
+ gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
+ help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 115 0c0 1.7-2.5 2-2.5 4M12 17h.01"/>',
+ search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>', mail:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/>',
+ bell:'<path d="M6 17V11a6 6 0 0112 0v6l2 2H4z"/><path d="M10 21h4"/>', arrow:'<path d="M7 17L17 7M9 7h8v8"/>', plus:'<path d="M12 5v14M5 12h14"/>',
+ flame:'<path d="M12 3c1 4 5 5 5 10a5 5 0 01-10 0c0-2 1-3 2-4 .3 1.5 1 2 2 2 0-3-1-5 1-8z" fill="currentColor"/>',
+ play:'<path d="M8 5l11 7-11 7z" fill="currentColor"/>', pause:'<path d="M9 6v12M15 6v12" stroke-width="3"/>', stop:'<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/>',
+ gh:'<path d="M9 19c-4 1.5-4-2-6-2m12 4v-3.5a3 3 0 00-.8-2.3c2.7-.3 5.5-1.3 5.5-6a4.6 4.6 0 00-1.3-3.2 4.3 4.3 0 00-.1-3.2s-1-.3-3.4 1.3a11.7 11.7 0 00-6 0C6.5 2.8 5.5 3.1 5.5 3.1a4.3 4.3 0 00-.1 3.2A4.6 4.6 0 004 9.5c0 4.6 2.8 5.7 5.5 6a3 3 0 00-.8 2.3V21"/>'
+};
+const ic = (n, s = 18) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const id = (w, d) => `w${w}d${d}`, pick = a => a[Math.floor(Math.random() * a.length)];
+const ymd = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;  // local date, not UTC
+const today = () => ymd(new Date());
+const planDate = (w, d) => { const s = new Date(C.start + "T00:00:00"); s.setDate(s.getDate() + (w-1)*7 + (d-1)); return s; };
+const fmtDate = d => d.toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" });
+
+let S = { done:{}, notes:{}, tests:{}, refl:{}, books:{}, name:"", days:[], rest:[], time:{}, timer:{running:false,startedAt:0,acc:0}, posts:{}, know:{}, built:{}, last:{}, checks:{}, verified:{} }, gh = null;
+
+// ---------- storage ----------
+async function load() {
+  let ok = false;
+  try { const r = await fetch("/api/progress"); if (r.ok) { const j = await r.json(); if (j && Object.keys(j).length) S = { ...S, ...j }; ok = true; } } catch {}
+  if (!ok) { try { const j = JSON.parse(localStorage.getItem("futurelab") || "null"); if (j) S = { ...S, ...j }; } catch {} }
+  S.timer = S.timer || { running:false, startedAt:0, acc:0 };
+}
+let t0;
+function save() {
+  clearTimeout(t0);
+  t0 = setTimeout(async () => {
+    try { localStorage.setItem("futurelab", JSON.stringify(S)); } catch {}
+    try { await fetch("/api/save", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ progress:S, files:buildFiles() }) }); } catch {}
+    pollGh();
+  }, 600);
+}
+async function pollGh() {
+  try { gh = await (await fetch("/api/sync-status")).json(); } catch { gh = { state:"offline" }; }
+  const m = { ok:`Synced ${gh.last ? ago(gh.last) : ""}`, syncing:"Syncing...", error:"Sync error: open Settings", "not-set-up":"GitHub not set up yet: see Settings", "no-remote":"Saved locally; add GitHub in Settings", idle:"Ready", offline:"Server not running: saved in this browser only" };
+  const el = $("#ghs"); if (el) el.textContent = m[gh.state] || "";
+}
+let upd = null;
+async function pollUpd() {
+  try { upd = await (await fetch("/api/update-status")).json(); } catch { upd = { state:"offline" }; }
+  const v = upd.version ? "v" + upd.version + " · " : "";
+  const m = { ok: upd.behind ? `${v}${upd.behind} update${upd.behind > 1 ? "s" : ""} ready` : `${v}up to date`, "not-a-repo":`${v}updates not connected yet`, "no-remote":`${v}no update source yet`, error:`${v}update check failed`, offline:"offline" };
+  const e = $("#upds"); if (e) e.textContent = m[upd.state] || ""; const b = $("#updbtn"); if (b) b.textContent = upd.behind ? "Update now" : "Check for updates";
+}
+const ago = iso => { const s = (Date.now() - new Date(iso)) / 1000; return s < 90 ? "just now" : s < 5400 ? Math.round(s/60) + " min ago" : s < 129600 ? Math.round(s/3600) + " h ago" : Math.round(s/86400) + " d ago"; };
+
+// ---------- xp, level, streak ----------
+const reflOk = w => { const r = S.refl[w]; return r && ["learned","hard","next"].every(k => (r[k]||"").trim().length >= 10); };
+const weekDone = w => WK[w-1].days.filter((_,i) => S.done[id(w,i+1)]).length;
+const passed = w => !!(S.tests[w] && S.tests[w].passed);
+function xpOf() { let x = 0; for (const k of WK) { for (let d=1; d<=6; d++) if (S.done[id(k.n,d)]) x += 10 + ((S.notes[id(k.n,d)]||"").trim() ? 5 : 0); if (passed(k.n)) x += 100; if (reflOk(k.n)) x += 20; } return x; }
+const maxXp = () => WK.length * (6*15 + 120);
+const levelOf = x => Math.min(100, 1 + Math.floor(99 * x / maxXp()));
+const titleOf = l => TITLES.filter(t => t[0] <= l).pop()[1];
+const currentWeek = () => (WK.find(k => !passed(k.n)) || WK[WK.length-1]).n;
+const daysDone = () => WK.reduce((a,k) => a + weekDone(k.n), 0);
+const activeDates = () => new Set([...(S.days||[]), ...(S.rest||[])]);
+function streak() { const set = activeDates(), d = new Date(); if (!set.has(ymd(d))) d.setDate(d.getDate()-1); let n = 0; while (set.has(ymd(d))) { n++; d.setDate(d.getDate()-1); } return n; }
+function bestStreak() { const a = [...activeDates()].sort(); let best = 0, run = 0, prev = null; for (const s of a) { const d = new Date(s+"T00:00:00"); run = prev && (d - prev) === 864e5 ? run + 1 : 1; prev = d; best = Math.max(best, run); } return best; }
+const isoWeekKey = d => { const t = new Date(d.getFullYear(), d.getMonth(), d.getDate()); t.setDate(t.getDate() + 3 - (t.getDay()+6)%7); const w1 = new Date(t.getFullYear(),0,4); return t.getFullYear() + "-" + (1 + Math.round(((t - w1)/864e5 - 3 + (w1.getDay()+6)%7)/7)); };
+function toast(msg, ms = 4200) { const t = $("#toast"); t.textContent = msg; t.style.display = "block"; clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = "none", ms); }
+function bump(fn) { const b = levelOf(xpOf()); fn(); const a = levelOf(xpOf()); save(); paintChrome(); return a > b ? a : 0; }
+function markActive() { if (!S.days.includes(today())) S.days.push(today()); }
+
+// ---------- timer ----------
+const elapsed = () => S.timer.acc + (S.timer.running ? (Date.now() - S.timer.startedAt) / 1000 : 0);
+const hms = s => { s = Math.floor(s); return [Math.floor(s/3600), Math.floor(s%3600/60), s%60].map(n => String(n).padStart(2,"0")).join(":"); };
+function timerToggle() { if (S.timer.running) { S.timer.acc = elapsed(); S.timer.running = false; } else { S.timer.startedAt = Date.now(); S.timer.running = true; } save(); route(true); }
+function timerStop() { const sec = Math.round(elapsed()); if (sec > 0) { S.time[today()] = (S.time[today()] || 0) + sec; markActive(); toast(`Logged ${Math.max(1, Math.round(sec/60))} min of focused study. Well done.`); } S.timer = { running:false, startedAt:0, acc:0 }; save(); route(true); }
+setInterval(() => { const e = $("#tt"); if (e) e.textContent = hms(elapsed()); }, 1000);
+
+// ---------- LinkedIn drafts and GitHub files ----------
+const gday = (w, i) => (w-1)*6 + i;
+function nextLabel(w, i) { if (i < 6) return `Day ${i+1}: ${WK[w-1].title}`; if (WK[w]) return `Week ${w+1}: ${WK[w].title}`; return "the final review"; }
+function dayPost(w, i) {
+  const k = WK[w-1], x = DAYS[id(w,i)] || { k:[], build:"" }, g = gday(w,i), note = (S.notes[id(w,i)] || "").trim();
+  const head = g === 1 ? `Day 1 of ${TOTAL_DAYS}. I'm starting a ${WK.length}-week plan to become an AI engineer, and I'll share what I learn along the way.` : `Day ${g} of ${TOTAL_DAYS} of my AI engineering plan.`;
+  const mid = note ? `What I learned:\n${note.slice(0, 700)}` : `What I covered:\n${x.k.slice(0,3).map(a => "- " + a).join("\n")}`;
+  return [head, "", `Topic: ${k.title}`, "", mid, "", `What I built: ${x.build}`, "", "Hard part: [edit: what was hard for me today]", "", `Next: ${nextLabel(w,i)}`, "", "#AIEngineering #LearningInPublic"].join("\n");
+}
+function weekPost(w) {
+  const k = WK[w-1], r = S.refl[w] || {}, t = S.tests[w] || {};
+  return [`Week ${w} of ${WK.length} done: ${k.title}.`, "", `Days finished: ${weekDone(w)}/6. Test: ${passed(w) ? `passed (${t.score}/${k.testAsk.length}, no AI help)` : "not passed yet"}.`, "", `What I learned: ${r.learned || "[edit: what I learned this week]"}`, "", `Hardest part: ${r.hard || "[edit: what was hard]"}`, "", `Next week: ${WK[w] ? WK[w].title : "final review"}`, "", `Streak: ${streak()} days.`, "", "#AIEngineering #LearningInPublic"].join("\n");
+}
+function ensurePost(key, text) { const p = S.posts[key]; if (!p) S.posts[key] = { text, edited:false, posted:false, date:today() }; else if (!p.edited) p.text = text; }
+function refreshDayPost(w, i) { if (S.done[id(w,i)]) ensurePost(`day-${String(gday(w,i)).padStart(3,"0")}`, dayPost(w,i)); }
+function refreshWeekPost(w) { if (passed(w) || weekDone(w) === 6) ensurePost(`week-${String(w).padStart(2,"0")}`, weekPost(w)); }
+function buildFiles() {
+  const f = { "README.md": "# Future Lab data\nMy learning progress, notes and LinkedIn drafts, saved automatically by Future Lab.\n" };
+  let md = `# My Future Lab notes\n\nLevel ${levelOf(xpOf())} (${titleOf(levelOf(xpOf()))}) | ${daysDone()}/${TOTAL_DAYS} days | streak ${streak()} days | ${Object.values(S.time).reduce((a,b)=>a+b,0)/3600 | 0} h tracked\n`;
+  for (const k of WK) {
+    const has = [1,2,3,4,5,6].some(d => (S.notes[id(k.n,d)]||"").trim()) || S.refl[k.n] || S.tests[k.n]; if (!has) continue;
+    md += `\n## Week ${k.n}: ${k.title}\n`;
+    if (S.tests[k.n]) md += `Test: ${S.tests[k.n].passed ? "passed" : "not yet"} (${S.tests[k.n].score}/${k.testAsk.length})\n`;
+    for (let d=1; d<=6; d++) { const n = (S.notes[id(k.n,d)]||"").trim(); if (n) md += `\n**Day ${d}:** ${n}\n`; }
+    const r = S.refl[k.n]; if (r) md += `\n**Reflection**\n- Learned: ${r.learned||""}\n- Hard: ${r.hard||""}\n- Next: ${r.next||""}\n`;
+  }
+  f["notes.md"] = md;
+  for (const [key, p] of Object.entries(S.posts)) f[`linkedin/${key}.md`] = p.text + "\n";
+  return f;
+}
+
+// ---------- chrome ----------
+const NAV1 = [["dashboard","dash","Dashboard"],["tasks","tasks","Tasks"],["calendar","cal","Calendar"],["roadmap","road","Roadmap"],["analytics","chart","Analytics"],["notes","notes","My notes"],["posts","post","LinkedIn"]];
+const NAV2 = [["coach","ai","Learn with AI"],["books","books","Books"],["id","id","ID card"],["settings","gear","Settings"],["help","help","Help"]];
+function paintNav(cur) {
+  const left = WK[currentWeek()-1].days.filter((_,i) => !S.done[id(currentWeek(), i+1)]).length;
+  const row = (a, bdg) => `<a href="#${a[0]}" class="${cur===a[0]?"on":""}">${ic(a[1])}${a[2]}${bdg?`<span class="badge">${bdg}</span>`:""}</a>`;
+  $("#nav1").innerHTML = NAV1.map(a => row(a, a[0]==="tasks" && left ? left : "")).join(""); $("#nav2").innerHTML = NAV2.map(a => row(a)).join("");
+}
+function paintChrome() { const l = levelOf(xpOf()); $("#whoname").textContent = S.name || "Learner"; $("#av").textContent = (S.name || "L").trim().charAt(0).toUpperCase(); $("#wholvl").textContent = `Level ${l} · ${titleOf(l)}`; }
+
+// ---------- shared pieces ----------
+const TYI = { read:"&#8801;", video:"&#9654;", practice:"&#9998;" };
+const fmtT = s => { s = Math.round(s); const h = Math.floor(s/3600), m = Math.floor(s%3600/60), x = s%60; return (h ? h + ":" + String(m).padStart(2,"0") : m) + ":" + String(x).padStart(2,"0"); };
+const ytUrl = l => `https://www.youtube.com/watch?v=${l.yt}${l.start ? "&t=" + l.start + "s" : ""}`;
+const linkUrl = l => l.k === "video" ? ytUrl(l) : l.u;
+const linksOf = key => (window.LINKS || {})[key] || [];
+function dayRow(w, i) {
+  const k = id(w,i), done = !!S.done[k], x = DAYS[k];
+  const chips = linksOf(k).map((l, n) => `<a class="chip2 ${l.k}" href="#day/${w}/${i}/${n}">${TYI[l.k]} ${esc(l.t.length > 48 ? l.t.slice(0, 46) + "..." : l.t)}</a>`).join("");
+  return `<div class="day ${done?"done":""}"><input type="checkbox" data-k="${k}" ${done?"checked":""}><div style="flex:1;min-width:0">
+    <div class="t"><b>Day ${i}</b> <span class="mute small">${fmtDate(planDate(w,i))}</span></div>
+    <div class="small" style="margin:3px 0 6px">${esc(x ? x.s : WK[w-1].days[i-1])}</div><div>${chips}</div>
+    <a class="btn pri sm" style="margin-top:8px" href="#day/${w}/${i}">${done ? "Review in study room" : "Open study room"}</a></div></div>`;
+}
+const nextTask = () => { const w = currentWeek(), d = WK[w-1].days.findIndex((_,i) => !S.done[id(w,i+1)]) + 1; return { w, d }; };
+function head(title, sub, acts = "") { return `<div class="head"><div><h1>${title}</h1><p>${sub}</p></div><div class="act">${acts}</div></div>`; }
+
+// ---------- views ----------
+function vDashboard() {
+  const w = currentWeek(), k = WK[w-1], nt = nextTask(), dd = daysDone(), tp = WK.filter(x => passed(x.n)).length, st = streak(), notes = Object.values(S.notes).filter(v => (v||"").trim()).length;
+  const wk = weekDone(w), last14 = [...Array(14)].map((_,i) => { const d = new Date(); d.setDate(d.getDate()-(13-i)); return activeDates().has(ymd(d)); });
+  // analytics bars: study minutes, Sunday..Saturday of this week
+  const now = new Date(), sun = new Date(now); sun.setDate(now.getDate() - now.getDay());
+  const mins = [...Array(7)].map((_,i) => { const d = new Date(sun); d.setDate(sun.getDate()+i); return { l:"SMTWTFS"[i], m:Math.round((S.time[ymd(d)]||0)/60) + (ymd(d)===today() ? Math.round(elapsed()/60) : 0), t:ymd(d)===today() }; });
+  const maxM = Math.max(...mins.map(x => x.m), 1), tipIdx = mins.findIndex(x => x.m === maxM && x.m > 0);
+  const bars = mins.map((x,i) => `<div class="bar">${i===tipIdx?`<span class="tip">${Math.min(100,Math.round(x.m/300*100))}%</span>`:""}<div class="pill ${x.m===0?"":x.t?"c":x.m>=maxM*0.6?"b":"a"}" style="height:${x.m===0?70:35+Math.round(x.m/maxM*55)}%"></div>${x.l}</div>`).join("");
+  // gauge
+  const cdone = Math.round((dd + tp) / (TOTAL_DAYS + WK.length) * 100), inprog = Math.min(100 - cdone, Math.round((6 - wk) / (TOTAL_DAYS + WK.length) * 100)), pend = 100 - cdone - inprog;
+  const up = []; for (let ww = w; ww <= WK.length && up.length < 5; ww++) for (let d = 1; d <= 6 && up.length < 5; d++) if (!S.done[id(ww,d)]) up.push([ww,d]);
+  const cols = ["#1c8454","#3a7bd5","#d99a2b","#7b5ea7","#d9604f"];
+  const draft = Object.entries(S.posts).filter(([,p]) => !p.posted).sort().pop();
+  const members = [...Array(6)].map((_,i) => { const d = i+1, done = S.done[id(w,d)], first = d === nt.d && nt.w === w; return `<div class="mem"><span class="av2">${d}</span><div><b>Day ${d}</b><span>${esc(k.title)}</span></div><span class="st ${done?"c":first?"p":"w"}">${done?"Completed":first?"In Progress":"Pending"}</span></div>`; }).join("");
+  const rested = (S.rest||[]).includes(today());
+  return `${head("Dashboard", "Learn it, prove it, post it.", `<a class="btn pri" href="${nt.d ? `#day/${nt.w}/${nt.d}` : `#week/${nt.w}`}">${ic("plus",16)} Start today</a><button class="btn out" id="syncbtn2">Sync to GitHub</button>`)}
+  <div class="grid">
+    <div class="card dark stat"><div class="t">Days Done <a class="arrow" href="#tasks">${ic("arrow",14)}</a></div><div class="n">${dd}</div><span class="chip">${wk}</span> <span class="sub">done this week</span></div>
+    <div class="card stat"><div class="t">Weeks Passed <a class="arrow" href="#roadmap">${ic("arrow",14)}</a></div><div class="n">${tp}</div><span class="chip">${WK.length - tp}</span> <span class="sub">weeks to go</span></div>
+    <div class="card stat"><div class="t">Streak <a class="arrow" href="#calendar">${ic("arrow",14)}</a></div><div class="n"><span class="flame">${ic("flame",34)}</span> ${st}<span class="small mute"> day${st===1?"":"s"}</span></div><span class="sub">Best: ${bestStreak()} days</span> ${rested?'<span class="chip">rest day</span>':'<button class="btn sm soft" data-rest="1" style="padding:2px 10px">rest day</button>'}</div>
+    <div class="card stat"><div class="t">Notes Written <a class="arrow" href="#notes">${ic("arrow",14)}</a></div><div class="n">${notes}</div><span class="chip">${WK.filter(x=>reflOk(x.n)).length}</span> <span class="sub">weekly reflections</span></div>
+    <div class="card span2"><h3>Study Analytics <span class="mute small">(minutes, this week)</span></h3><div class="bars">${bars}</div></div>
+    <div class="card rem"><h3>Reminders</h3><div class="big">Week ${nt.w} · Day ${nt.d || "Test"}</div><div class="small mute">${esc(WK[nt.w-1].title)}</div>
+      ${draft ? `<div class="small" style="margin-top:8px"><span class="tag g">LinkedIn</span> <a href="#posts">post ready to copy</a></div>` : ""}
+      <button class="btn pri" id="startbtn">${ic("play",16)} ${S.timer.running ? "Timer running" : "Start studying"}</button></div>
+    <div class="card list"><h3>Next up <a class="btn sm out" href="#roadmap" style="float:right;padding:3px 10px">+ Plan</a></h3>${up.map((u,i) => `<a class="it" href="#week/${u[0]}"><span class="dot" style="background:${cols[i%5]}">${u[1]}</span><div><b>${esc(WK[u[0]-1].title)}</b><span>Due date: ${fmtDate(planDate(u[0],u[1]))}</span></div></a>`).join("")}</div>
+    <div class="card span2"><h3>This Week <a class="btn sm out" href="#week/${w}" style="float:right;padding:3px 10px">Open week</a></h3>${members}</div>
+    <div class="card gauge"><h3 style="text-align:left">Plan Progress</h3>
+      <svg viewBox="0 0 200 108"><defs><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#eef0ef"/><rect width="2.4" height="7" fill="#c9d1cc"/></pattern></defs>
+        <path d="M20 100 A80 80 0 0 1 180 100" pathLength="100" fill="none" stroke="url(#hatch)" stroke-width="28"/>
+        <path d="M20 100 A80 80 0 0 1 180 100" pathLength="100" fill="none" stroke="#1c8454" stroke-width="28" stroke-dasharray="0 ${cdone} ${inprog} ${100-cdone-inprog}"/>
+        <path d="M20 100 A80 80 0 0 1 180 100" pathLength="100" fill="none" stroke="#0d4d33" stroke-width="28" stroke-dasharray="${cdone} ${100-cdone}"/></svg>
+      <div class="pc">${cdone}%</div><div class="l">Plan Complete</div>
+      <div class="legend"><span><i style="background:#0d4d33"></i>Completed</span><span><i style="background:#1c8454"></i>In Progress</span><span><i style="background:#c9d1cc"></i>Pending</span></div></div>
+    <div class="card timer"><h3>Time Tracker</h3><div class="tt" id="tt">${hms(elapsed())}</div>
+      <button class="tbtn" style="background:#fff;color:#0d4d33" id="tpp">${ic(S.timer.running?"pause":"play",20)}</button><button class="tbtn" style="background:#e2574c;color:#fff" id="tstop">${ic("stop",18)}</button>
+      <div class="small" style="opacity:.8;margin-top:8px">Today: ${Math.round(((S.time[today()]||0)+(S.timer.running?elapsed():0))/60)} min · last 14 days</div><div class="strip">${last14.map(a => `<i class="${a?"on":""}"></i>`).join("")}</div></div>
+  </div>`;
+}
+function vTasks() {
+  const w = currentWeek(), k = WK[w-1], nt = nextTask();
+  return `${head("Tasks", "Do the next step. Read first, build second, write one note.", `<a class="btn out" href="#week/${w}">Open the whole week</a>`)}
+  <div class="card"><span class="tag">Week ${w}</span><span class="tag">${esc(C.blocks[k.block])}</span>${k.gate?'<span class="tag w">BLOCK GATE</span>':""}
+  <h3 style="margin-top:8px">${esc(k.title)}</h3><div class="mute">${esc(k.goal)}</div></div>
+  <div class="card" style="margin-top:10px">${nt.d ? `<b>Do this next</b>${dayRow(w, nt.d)}` : `<b>All 6 days done.</b> <a href="#week/${w}">Take the Week ${w} test</a>`}</div>
+  <div class="card small mute" style="margin-top:10px"><b>Daily rules:</b> try 20 minutes before asking AI · write one note · no merging code you cannot explain · sleep 7+ hours.</div>`;
+}
+const examiner = k => `You are my strict but fair examiner for this topic: "${k.title}" (${k.goal}).\nRules: ask ONE question at a time. No hints before I answer. After each answer, score it 0-10, say what was wrong or missing, then ask the next question. Mix: 3 concept questions, 2 "what would you do if this broke" questions, 1 small practical task. After 8 questions give a total score, my weakest 3 areas and what to re-read.\nCover: ${k.days.map((_,i) => (DAYS[id(k.n,i+1)] ? DAYS[id(k.n,i+1)].k.slice(0,2).join("; ") : "")).filter(Boolean).join("; ")}.`;
+function vWeek(n) {
+  const k = WK[n-1]; if (!k) return "<p>No such week.</p>"; const t = S.tests[n] || {}, r = S.refl[n] || {};
+  return `${head(`Week ${n}: ${esc(k.title)}`, esc(k.goal), `<a class="btn out" href="#roadmap">All weeks</a>`)}
+  <div style="margin-bottom:10px"><span class="tag">${esc(C.blocks[k.block])}</span>${k.gate?'<span class="tag w">BLOCK GATE</span>':""}${passed(n)?'<span class="tag g">test passed</span>':""}</div>
+  <div class="card"><b>Resources for this week</b><ul>${k.read.map(x => `<li><a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.t)}</a></li>`).join("")}</ul><div class="small mute">Rule: read first. Watch a video only where a day says WATCH, and only the part named. Put these links in one NotebookLM notebook for the week.</div></div>
+  <div class="card" style="margin-top:10px"><b>Daily plan</b>${k.days.map((_,i) => dayRow(n, i+1)).join("")}</div>
+  <div class="card" style="margin-top:10px"><b>Day 7: the test</b>
+    <p><b>Do (no AI help):</b> ${k.testDo.map(esc).join("<br>")}</p><label><input type="checkbox" id="tdo" ${t.did?"checked":""}> I did the practical task honestly, without AI help.</label>
+    <p><b>Answer from memory, no notes:</b></p><ol>${k.testAsk.map(q => `<li>${esc(q)}</li>`).join("")}</ol>
+    <p>Correct: <input type="number" id="tsc" min="0" max="${k.testAsk.length}" value="${t.score ?? ""}" style="width:80px;display:inline-block"> of ${k.testAsk.length} <span class="mute small">(need ${Math.ceil(k.testAsk.length*0.75)})</span></p>
+    <button class="btn pri sm" id="trec">Record my result</button> <span id="tmsg" class="small"></span>
+    <details style="margin-top:8px"><summary class="small mute">Get examined by an AI (copy and paste)</summary><pre id="ex">${esc(examiner(k))}</pre><button class="btn sm soft" data-copy="ex">Copy</button></details>
+    <p class="small mute">Self-graded: be strict. The goal is knowing, not the badge.</p></div>
+  <div class="card" style="margin-top:10px"><b>Reflection (a sentence each)</b>
+    <p class="small mute">What did I learn?</p><textarea data-r="learned">${esc(r.learned||"")}</textarea>
+    <p class="small mute">What was the hard part?</p><textarea data-r="hard">${esc(r.hard||"")}</textarea>
+    <p class="small mute">What will I do differently next week?</p><textarea data-r="next">${esc(r.next||"")}</textarea></div>`;
+}
+function vRoadmap() {
+  const cw = currentWeek();
+  return head("Roadmap", "26 weeks. Pass each week's test to move on.") + C.blocks.map((b,bi) => `<h3 style="margin:16px 4px 8px">Block ${esc(b)}</h3><div class="g4">${WK.filter(k => k.block === bi).map(k => `<a class="wk ${passed(k.n)?"pass":""} ${k.n===cw?"cur":""}" href="#week/${k.n}"><b>Week ${k.n}</b><div class="small">${esc(k.title)}</div><div class="small mute">${weekDone(k.n)}/6 days${passed(k.n)?" · passed":""}${k.gate?" · GATE":""}</div></a>`).join("")}</div>`).join("");
+}
+function vCalendar() {
+  const set = new Set(S.days), rest = new Set(S.rest || []), td = today();
+  let rows = ""; for (let w = 1; w <= WK.length; w++) { rows += `<div class="mute">Week ${w}</div>`; for (let d = 1; d <= 7; d++) { const dt = planDate(w, d), key = ymd(dt), done = d <= 6 && S.done[id(w,d)], t = d === 7 && passed(w);
+    rows += `<div class="c ${t?"t":done?"d":rest.has(key)?"r":""} ${key===td?"td":""}" title="${fmtDate(dt)}${done?" · day done":t?" · test passed":rest.has(key)?" · rest day":""}"></div>`; } }
+  return `${head("Calendar", `Streak ${streak()} days · best ${bestStreak()} · study days ${set.size}`)}<div class="card"><div class="cal"><span></span>${["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(d => `<span class="mute" style="text-align:center">${d}</span>`).join("")}${rows}</div>
+  <p class="small mute">Dark green = day done or test passed · light green = rest day · orange outline = today. Sunday is the weekly test.</p></div>`;
+}
+function vAnalytics() {
+  const tot = Object.values(S.time).reduce((a,b) => a + b, 0), sc = Object.values(S.tests).filter(t => t.passed).map(t => t.score);
+  const rows = WK.filter(k => weekDone(k.n) || S.tests[k.n]).map(k => `<tr><td>Week ${k.n}</td><td>${esc(k.title)}</td><td>${weekDone(k.n)}/6</td><td>${S.tests[k.n] ? (S.tests[k.n].passed ? "passed " : "not yet ") + S.tests[k.n].score + "/" + k.testAsk.length : "-"}</td></tr>`).join("");
+  return `${head("Analytics", "Numbers that show real progress.")}<div class="grid">
+   <div class="card stat"><div class="t">Hours tracked</div><div class="n">${(tot/3600).toFixed(1)}</div></div><div class="card stat"><div class="t">Days done</div><div class="n">${daysDone()}/${TOTAL_DAYS}</div></div>
+   <div class="card stat"><div class="t">Tests passed</div><div class="n">${WK.filter(k => passed(k.n)).length}/${WK.length}</div></div><div class="card stat"><div class="t">Points</div><div class="n">${xpOf()}</div><span class="sub">of ${maxXp()}</span></div></div>
+   <div class="card" style="margin-top:10px"><h3>Weeks so far</h3>${rows ? `<table>${rows}</table>` : '<p class="mute">Nothing yet.</p>'}</div>`;
+}
+function vNotes() {
+  const q = (vNotes.q || "").toLowerCase(), rows = [];
+  for (const k of WK) { for (let d=1; d<=6; d++) { const n = S.notes[id(k.n,d)]; if (n) rows.push([`Week ${k.n} Day ${d}`, n, k.n]); } const r = S.refl[k.n]; if (r) for (const f of ["learned","hard","next"]) if (r[f]) rows.push([`Week ${k.n} reflection: ${f}`, r[f], k.n]); }
+  const shown = rows.filter(r => !q || r[1].toLowerCase().includes(q) || r[0].toLowerCase().includes(q));
+  return `${head("My notes", "Everything you wrote. It is also saved to GitHub as notes.md.")}<input type="text" id="nq" placeholder="search my notes" value="${esc(vNotes.q||"")}" style="margin-bottom:10px">
+  ${shown.length ? shown.map(r => `<div class="card" style="margin-bottom:8px"><a href="#week/${r[2]}">${esc(r[0])}</a><div style="white-space:pre-wrap">${esc(r[1])}</div></div>`).join("") : '<p class="mute">Nothing yet. Notes and reflections appear here.</p>'}`;
+}
+function vPosts() {
+  const list = Object.entries(S.posts).sort().reverse();
+  return `${head("LinkedIn", "A draft is made when you finish a day or a week. Edit the [brackets], copy, post.")}
+  <div class="card small" style="margin-bottom:10px">Tip: post within a day, while it is fresh. Use your real words in the [brackets]; only post what you actually did.<br><b>Pictures that look authentic:</b> a real screenshot of your real work, with secrets and personal details blurred; a diagram you drew; a chart from your own data; the hard moment (an error you fixed). Never AI-generated images, stock photos or edited results. Add alt text. A face is optional.</div>
+  ${list.length ? list.map(([key, p]) => `<div class="card" style="margin-bottom:10px"><b>${key.startsWith("week") ? "Week " + +key.slice(5) : "Day " + +key.slice(4)}</b> <span class="mute small">${p.date}</span> ${p.posted?'<span class="tag g">posted</span>':'<span class="tag w">draft</span>'}
+   <div class="small" style="margin:8px 0 2px"><b>Picture to attach:</b> ${esc(picIdea(key))}</div><textarea data-post="${key}" style="min-height:190px;margin-top:4px">${esc(p.text)}</textarea>
+   <div style="margin-top:8px;display:flex;gap:8px;align-items:center"><button class="btn pri sm" data-copypost="${key}">Copy post</button><label class="small"><input type="checkbox" data-posted="${key}" ${p.posted?"checked":""}> I posted it</label></div></div>`).join("") : '<p class="mute">No drafts yet. Finish Day 1 and your first post appears here.</p>'}`;
+}
+const PIC = ["Screenshot of your terminal showing the command and what it printed (blur usernames, IPs and folders you do not want public).", "Screenshot of your API docs page (/docs) or your tests passing, or a simple architecture diagram you drew.", "A chart you made (loss curve, distribution) with labelled axes, or a photo of your handwritten working.", "Screenshot of your agent's run log or trace (remove any keys), or a diagram of your loop.", "Your eval results table, or your attack-and-fix list (no secrets).", "A dashboard or trace screenshot, or a timeline diagram for a post-mortem.", "A clean design diagram, or your GitHub profile with the pinned projects."];
+function picIdea(key) { if (key.startsWith("week")) return "Your Calendar page (streak) next to the week's best result, for example a passing test or a chart."; const w = Math.ceil(+key.slice(4) / 6); return PIC[WK[w-1].block]; }
+const PROMPTS = [
+ ["Tutor that makes me think", "Act as my tutor for [TOPIC]. Do not give me the answer. Ask me one question at a time and let me try first. If I am stuck for two tries, give a small hint, never the full solution. After I solve it, ask me to explain it back in my own words."],
+ ["Explain, then test me", "Explain [TOPIC] to me in simple English for a beginner in 5 short points. Then ask me 5 questions, one at a time. Wait for my answer each time and tell me exactly what I missed."],
+ ["Find the gaps in what I wrote", "Here is my explanation of [TOPIC]. Do not rewrite it. List what is wrong, what is missing, and 3 questions that would expose weak understanding.\n\n[PASTE MY EXPLANATION]"],
+ ["Debug without giving the fix", "My code fails. Do not fix it. Ask me what I expected, what happened, and what I tried. Then give ONE next thing to check. Repeat until I find the cause.\n\n[PASTE CODE AND ERROR]"],
+ ["Review my code like a senior", "Review this code for bugs, security problems, unclear names and missing tests. Rank the top 5 issues. Do not rewrite it; explain each issue so I can fix it myself.\n\n[PASTE CODE]"],
+ ["Turn a vague idea into a spec", "I want to build [IDEA]. Ask me up to 8 questions to clarify it. Then write a task with: goal, inputs, outputs, acceptance criteria (testable), and what is out of scope."],
+ ["Weekly review", "Here are my notes this week: [PASTE NOTES]. Tell me: what I clearly understand, what I only think I understand, and 5 spaced-review questions for next week."],
+ ["Correct my English after I write", "Here is my text. Correct grammar and clarity, but keep my meaning and voice. List my 3 most common mistakes so I improve.\n\n[PASTE TEXT]"],
+];
+function vCoach() {
+  const k = WK[currentWeek()-1];
+  return `${head("Learn with AI", "Without cheating yourself.")}
+  <div class="card"><b>The rule that makes this work</b><p>Try first for 20 minutes. Use AI to <i>question</i> you, not to finish for you. If you only read AI answers and nod, you will learn very little.</p></div>
+  <div class="card" style="margin-top:10px"><b>NotebookLM: your private study tutor</b><ol><li>One notebook per week. Add this week's links, PDFs and YouTube links as sources.</li><li>Ask for a study guide first, then quiz questions. It also makes flashcards and audio overviews (check what your account offers).</li><li>Ask it to cite where each answer comes from, and check the source.</li><li>Then close it and write the explanation yourself. Compare.</li></ol><p class="small mute">One-click outputs can make learning passive. Use them to find gaps, not to replace reading.</p></div>
+  <div class="card" style="margin-top:10px"><b>Which tool for what</b><table><tr><td>NotebookLM</td><td>Learn from sources you chose.</td></tr><tr><td>ChatGPT or Claude</td><td>Tutor and examiner. Use the prompts below.</td></tr><tr><td>A coding agent</td><td>Scaffolding and review only. You type the fix for bugs in your labs. Always read the diff.</td></tr><tr><td>This app's notes</td><td>Write in your own words after each day.</td></tr></table></div>
+  <div class="card" style="margin-top:10px"><b>This week's examiner (Week ${k.n})</b><pre id="pex">${esc(examiner(k))}</pre><button class="btn sm soft" data-copy="pex">Copy</button></div>
+  ${PROMPTS.map((p,i) => `<div class="card" style="margin-top:10px"><b>${esc(p[0])}</b><pre id="p${i}">${esc(p[1])}</pre><button class="btn sm soft" data-copy="p${i}">Copy</button></div>`).join("")}`;
+}
+const BL = () => window.BOOKLINKS || {};
+const bookBtns = bid => { const b = BL()[bid]; if (!b) return ""; return `<a class="btn sm ${b.free ? "pri" : "soft"}" href="${esc(b.open)}" target="_blank" rel="noopener">${esc(b.ol)}</a>${b.dl ? ` <a class="btn sm soft" href="${esc(b.dl)}" target="_blank" rel="noopener">${esc(b.dll)}</a>` : ""}`; };
+function vBooks() {
+  const fin = C.books.filter(b => S.books[b[0]]).length;
+  return `${head("Books", `Open, download or borrow every book. ${fin}/${C.books.length} finished.`)}
+  <div class="card small" style="margin-bottom:10px">Free books open or download from the buttons. For paid books the buttons go to the official page or a library finder: borrow first, buy if you love it. The first four books make you better at learning everything else. Each day's study room also shows the books for that week.</div>
+  ${C.books.map(b => { const bl = BL()[b[0]] || {}; return `<div class="card" style="margin-bottom:8px;display:flex;gap:12px;align-items:flex-start"><input type="checkbox" data-book="${b[0]}" ${S.books[b[0]] ? "checked" : ""} style="width:19px;height:19px;accent-color:var(--g2);margin-top:4px;flex:none"><div style="flex:1;min-width:0"><b>${esc(b[1])}</b> <span class="mute">${esc(b[2])}</span> ${bl.free ? '<span class="tag g">free</span>' : '<span class="tag">paid or borrow</span>'}<div class="small">${esc(b[3])}</div><div class="small mute" style="margin:2px 0 8px">Read during: ${esc(b[4])}</div>${bookBtns(b[0])}</div></div>`; }).join("")}
+  <h3 style="margin:16px 4px 8px">Things easy to forget</h3><div class="card"><table>${C.forgotten.map(f => `<tr><td><b>${esc(f[0])}</b></td><td>${esc(f[1])}</td></tr>`).join("")}</table></div>
+  <div class="card small" style="margin-top:10px"><b>Honest limits.</b> Six months gives you working skill and proof, not mastery. Nobody can promise which skills matter in 20-30 years, so this plan builds what carries over: how systems work, how to prove they work, and how to keep learning. Redo the plan every 6 months using real job posts and your own results.</div>`;
+}
+function vId() {
+  const x = xpOf(), l = levelOf(x), un = l >= 100;
+  return `${head("ID card", `Level ${l} of 100 · ${titleOf(l)} · ${x}/${maxXp()} points`)}<label class="small mute">Name on your card</label><input type="text" id="nm" value="${esc(S.name||"")}" placeholder="your name" style="max-width:320px;margin:4px 0 12px">
+  <div class="idcard ${un?"":"lock"}"><div class="small mute">FUTURE LAB · LEARNING ID</div><h2 style="margin:.3em 0">${esc(S.name||"YOUR NAME")}</h2><div>${un ? "AI Engineer: Level 100" : "AI Engineer (locked): reach Level 100"}</div>
+  <div class="small mute" style="margin-top:8px">${WK.filter(k => passed(k.n)).length}/${WK.length} tests passed · ${daysDone()} days done</div><div class="small mute">Self-awarded learning badge, not a certificate. Your projects are the proof.</div></div>
+  <p class="small mute">Points: day +10, a note +5, test +100, reflection +20. Level 100 needs every day, note, test and reflection.</p>
+  <div class="card"><b>Block gates</b><table>${WK.filter(k => k.gate).map(k => `<tr><td>Week ${k.n}</td><td>${esc(k.title)}</td><td>${passed(k.n)?"passed":"not yet"}</td></tr>`).join("")}</table></div>`;
+}
+function vSettings() {
+  const g = gh || {}, setup = g.state === "not-set-up" || g.state === "no-remote";
+  return `${head("Settings", "GitHub backup and your details.")}
+  <div class="card"><b>${ic("gh",18)} GitHub backup</b>
+   <p>Status: <b>${esc(({ok:"synced",syncing:"syncing",error:"error","not-set-up":"not set up","no-remote":"local git only",idle:"ready",offline:"server not running"})[g.state] || "checking")}</b>${g.last ? " · last push " + esc(ago(g.last)) : ""}</p>
+   ${g.remote ? `<p class="small">Repository: ${esc(g.remote)}</p>` : ""}${g.msg ? `<p class="small" style="color:var(--red)">${esc(g.msg)}</p>` : ""}
+   <p class="small mute">Data folder (its own git repo): ${esc(g.data || "")}. Every save writes progress.json, notes.md and your LinkedIn drafts there, commits and pushes about 20 seconds later. Git uses your own GitHub login; this app never sees your password.</p>
+   ${setup ? `<p><b>One-time setup:</b> run this in a terminal (it asks you before creating a private repo named future-lab-data):</p><pre>bash setup_github.sh</pre><p class="small mute">Run it from the 12_future_lab folder.</p>` : ""}
+   <button class="btn pri sm" id="syncbtn3">Sync now</button></div>
+  <div class="card" style="margin-top:10px"><b>App updates and your data</b>
+   <p class="small">Version: <b>${esc((upd && upd.version) || "?")}</b> · ${esc(({ ok:(upd && upd.behind ? upd.behind + " update(s) ready" : "up to date"), "not-a-repo":"not connected to the FutureLab repo yet", "no-remote":"repo has no remote yet", error:"check failed" })[(upd || {}).state] || "")}</p>
+   <p class="small mute">Update downloads new lessons and fixes from your FutureLab repo. It never touches your progress or notes, which live in a separate folder: ${esc(g.data || "")}</p>
+   <button class="btn pri sm" id="updbtn2">Check for updates / Update now</button></div>
+  <div class="card" style="margin-top:10px"><b>Rest day</b><p class="small mute">One rest day per week keeps your streak alive without pretending you studied.</p><button class="btn soft sm" data-rest="1">Take a rest day today</button></div>
+  <div class="card" style="margin-top:10px"><b>Your name</b><input type="text" id="nm" value="${esc(S.name||"")}" placeholder="your name" style="max-width:320px;margin-top:6px"></div>`;
+}
+function vHelp() {
+  return `${head("Help", "How this works.")}<div class="card"><ul>
+   <li><b>Open it:</b> double-click <b>Future Lab.app</b> (or Start Future Lab.command) in the 12_future_lab folder, or go to <b>http://localhost:8765</b>. Drag the app to your Dock. Run <b>bash install.sh</b> once to open it automatically at login.</li>
+   <li><b>Every day:</b> click Start today, open the study room, click each link (pages and videos open right there), tick the must-know items, build, write a note, press Finish.</li>
+   <li><b>Every Sunday:</b> take the week's test and write the reflection.</li>
+   <li><b>Streak:</b> counts every calendar day you tick a day, pass a test, log study time or take a rest day (one per week).</li>
+   <li><b>LinkedIn:</b> ticking a day or finishing a week creates a draft. Edit the [brackets], copy, post.</li>
+   <li><b>GitHub:</b> everything you write is saved as files and pushed to your private repo. See Settings.</li>
+   <li><b>Search:</b> press Cmd+F (or Ctrl+F) and type.</li>
+   <li><b>Edit the plan:</b> change curriculum.js or days_*.js. Progress is kept.</li></ul></div>`;
+}
+function vSearch(q) {
+  const s = q.toLowerCase(), out = [];
+  for (const k of WK) { for (let d=1; d<=6; d++) { const x = DAYS[id(k.n,d)], hay = (k.title + " " + (x ? x.s + " " + x.k.join(" ") + " " + x.build : "") + " " + (S.notes[id(k.n,d)]||"")).toLowerCase(); if (hay.includes(s)) out.push([k.n, d, x ? x.s : k.days[d-1]]); } }
+  return `${head("Search", `Results for "${esc(q)}"`)}${out.slice(0,40).map(o => `<a class="card" style="display:block;margin-bottom:8px;text-decoration:none;color:inherit" href="#week/${o[0]}"><b>Week ${o[0]} · Day ${o[1]}</b> <span class="mute">${esc(WK[o[0]-1].title)}</span><div class="small mute">${esc(o[2].slice(0,160))}</div></a>`).join("") || '<p class="mute">No matches.</p>'}`;
+}
+
+// ---------- study room ----------
+function resBtn(key, l, i, on) {
+  const seg = l.k === "video" ? (l.start || l.end ? `Watch ${fmtT(l.start)} to ${fmtT(l.end || l.len)} (video is ${fmtT(l.len)})` : `Watch all ${fmtT(l.len)}`) : (l.embed ? "Opens here" : "Opens in a new tab");
+  return `<button class="res-btn ${on ? "on" : ""}" data-res="${key}|${i}"><span class="ty ${l.k}">${TYI[l.k]}</span><div style="min-width:0"><b class="small" style="display:block;line-height:1.25">${esc(l.t)}</b><span class="small mute">${seg}</span></div></button>`;
+}
+function readerHtml(key, idx) {
+  const l = linksOf(key)[idx];
+  if (!l) return `<div style="padding:28px"><h3>Build day: no reading</h3><p class="mute">Use your notes and the must-know list, then build it. If you get stuck, copy the AI lesson prompt and ask for hints, not the answer.</p></div>`;
+  const bar = `<div class="bar2"><b style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(l.t)}</b><a class="btn sm soft" href="${esc(linkUrl(l))}" target="_blank" rel="noopener">Open in new tab &#8599;</a></div>`;
+  if (l.k === "video" && l.embed) { const q = `start=${l.start || 0}${l.end ? "&end=" + l.end : ""}&rel=0`;
+    return bar + `<div class="small mute" style="padding:6px 14px">${l.start || l.end ? `Watch ${fmtT(l.start)} to ${fmtT(l.end || l.len)}, then stop. ` : ""}Needs internet. Pause often and do it with the video.</div><iframe src="https://www.youtube-nocookie.com/embed/${esc(l.yt)}?${q}" title="${esc(l.t)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`; }
+  if (l.k !== "video" && l.embed) return bar + `<div class="small mute" style="padding:6px 14px">Page looks empty or stuck? Use "Open in new tab". Needs internet.</div><iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" src="${esc(l.u)}" referrerpolicy="no-referrer" title="${esc(l.t)}"></iframe>`;
+  return bar + `<div style="padding:28px"><h3>${esc(l.t)}</h3><p class="mute">${l.k === "video" ? "This video cannot be played inside the app." : "This site does not allow showing its page inside another app."} It opens in a new tab. Do the task there, then come back and tick the must-know list.</p><a class="btn pri" href="${esc(linkUrl(l))}" target="_blank" rel="noopener">Open ${l.k === "video" ? "on YouTube" : "the page"} &#8599;</a></div>`;
+}
+function vRoom(w, d, ri) {
+  const k = WK[w-1], key = id(w,d), x = DAYS[key];
+  if (!k || !x || !(d >= 1 && d <= 6)) return "<p>No such day.</p>";
+  const links = linksOf(key); if (ri !== undefined && ri !== "") S.last[key] = +ri;
+  const idx = Math.min(S.last[key] || 0, Math.max(links.length - 1, 0));
+  const kn = S.know[key] || [], nk = x.k.filter((_, i) => kn[i]).length, built = !!S.built[key], hasNote = !!(S.notes[key] || "").trim(), done = !!S.done[key];
+  const wb = Object.entries(BL()).filter(([, b]) => b.weeks.includes(w)).slice(0, 3);
+  const prev = d > 1 ? `#day/${w}/${d-1}` : `#week/${w}`, next = d < 6 ? `#day/${w}/${d+1}` : `#week/${w}`;
+  return `<div class="room"><div class="rl">
+    <div class="card"><div style="display:flex;align-items:center;gap:8px"><a class="btn sm soft" href="${prev}">&larr;</a><div style="flex:1;text-align:center"><b>Week ${w} &middot; Day ${d}</b><div class="small mute">${fmtDate(planDate(w,d))}</div></div><a class="btn sm soft" href="${next}">&rarr;</a></div>
+      <h3 style="margin:12px 0 6px">${esc(k.title)}</h3>
+      <div class="steps"><span class="${nk === x.k.length ? "on" : ""}"></span><span class="${built ? "on" : ""}"></span><span class="${hasNote ? "on" : ""}"></span><span class="${done ? "on" : ""}"></span></div>
+      <div class="small mute" style="margin-top:4px">Learn &middot; Build &middot; Note &middot; Finish</div></div>
+    <div class="card"><b>1. Learn: click a link to open it here</b><div class="rl" style="gap:6px;margin-top:8px">${links.length ? links.map((l, i) => resBtn(key, l, i, i === idx)).join("") : '<div class="small mute">Build day: no reading. Use your notes.</div>'}</div>
+      <div class="small mute" style="margin-top:8px">${esc(x.s)}</div>
+      ${links.length ? `<button class="btn sm soft" style="margin-top:8px" data-nlm="${key}">Copy links for NotebookLM</button>` : ""}
+      ${wb.length ? `<div class="small" style="margin-top:12px"><b>Books for this week</b>${wb.map(([bid]) => { const cb = C.books.find(b => b[0] === bid); return `<div style="margin:6px 0"><div>${esc(cb[1])}</div>${bookBtns(bid)}</div>`; }).join("")}</div>` : ""}</div>
+    <div class="card know"><b>2. Must know (non-negotiable) <span class="mute small" id="knc">${nk}/${x.k.length}</span></b>
+      ${x.k.map((a, i) => `<label><input type="checkbox" data-know="${key}|${i}" ${kn[i] ? "checked" : ""}><span class="small">${esc(a)}</span></label>`).join("")}
+      <div class="small mute">Tick only when you can explain it out loud without looking.</div>
+      <button class="btn sm soft" style="margin-top:8px" data-lesson="${key}">Copy AI lesson prompt</button></div>
+    <div class="card"><b>3. Build</b><p class="small" style="margin:6px 0">${esc(x.build)}</p><label class="small"><input type="checkbox" data-built="${key}" ${built ? "checked" : ""}> I built it myself.</label> ${S.verified[key] ? '<span class="tag g">checked by AI</span>' : ""}<div class="small res" style="margin-top:6px"><b>Result:</b> ${esc(x.out)}</div>
+      <details style="margin-top:10px" ${S.checks[key] ? "open" : ""}><summary class="small"><b>Check my code with DeepSeek or Qwen (free, in your browser)</b></summary>
+        <ol class="small" style="margin:8px 0 8px 18px;padding:0"><li>Write and run it yourself first.</li><li>Paste your working code below, and what it printed.</li><li>Press "Make prompt". It includes the answer key and is copied for you. Do not read it first.</li><li>Open DeepSeek or Qwen, paste, read the verdict.</li><li>Tell the app what the AI said.</li></ol>
+        <textarea id="chkcode" placeholder="Paste your code here" style="min-height:120px;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea>
+        <textarea id="chkout" placeholder="What it printed when you ran it (optional)" style="min-height:60px;margin-top:6px"></textarea>
+        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn pri sm" data-mkprompt="${key}">Make prompt and copy</button><button class="btn soft sm" data-popai="deepseek">Open DeepSeek</button><button class="btn soft sm" data-popai="qwen">Open Qwen</button><button class="btn soft sm" data-aitab="${key}">Try DeepSeek in this window</button></div>
+        <div class="small" style="margin-top:8px">The AI said: <button class="btn soft sm" data-verdict="${key}|correct">Correct</button> <button class="btn soft sm" data-verdict="${key}|partly">Partly</button> <button class="btn soft sm" data-verdict="${key}|wrong">Wrong</button></div>
+        <div class="small" id="chkres" style="margin-top:6px">${S.checks[key] ? `Last check: <b>${esc(S.checks[key].verdict)}</b> on ${esc(S.checks[key].date)}` : ""}</div>
+        <p class="small mute">The AI reads your code but cannot run it. Your own run is the real proof. The verdict is what you report, so be honest. Qwen cannot be shown inside this window (it blocks that), so it opens in its own window.</p></details></div>
+    <div class="card"><b>4. Write a note</b><textarea data-n="${key}" placeholder="What did I learn? What was hard? What would I do differently?" style="margin-top:6px">${esc(S.notes[key] || "")}</textarea></div>
+    <div class="card"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b>Focus timer</b><span id="tt" style="font-size:22px;font-weight:600">${hms(elapsed())}</span><button class="btn sm soft" id="tpp">${S.timer.running ? "Pause" : "Start"}</button><button class="btn sm soft" id="tstop">Stop and log</button></div></div>
+    ${done ? `<div class="card" style="border:2px solid var(--g2)"><b>Day finished. Nice work.</b><p class="small mute">Your LinkedIn draft is ready.</p><a class="btn pri sm" href="${next}">${d < 6 ? "Next day" : "Back to the week"} &rarr;</a> <a class="btn soft sm" href="#posts">LinkedIn draft</a> <button class="btn soft sm" data-undo="${key}">Undo</button></div>`
+      : `<button class="btn pri" style="width:100%;justify-content:center" data-finish="${key}">Finish day (+10 points)</button>`}
+  </div><div class="reader card" style="padding:0" id="reader">${readerHtml(key, idx)}</div></div>`;
+}
+function roomProgress(key) {
+  const x = DAYS[key], sp = document.querySelectorAll(".steps span"); if (!x || !sp.length) return;
+  const kn = S.know[key] || [], nk = x.k.filter((_, i) => kn[i]).length, st = [nk === x.k.length, !!S.built[key], !!(S.notes[key] || "").trim(), !!S.done[key]];
+  sp.forEach((e, j) => e.classList.toggle("on", st[j])); const c = $("#knc"); if (c) c.textContent = nk + "/" + x.k.length;
+}
+function setDone(key, val) {
+  const [w, i] = key.slice(1).split("d").map(Number);
+  const up = bump(() => { S.done[key] = val; if (val) { markActive(); refreshDayPost(w, i); refreshWeekPost(w); } });
+  if (val) { toast((up ? `LEVEL UP! Level ${up}: ${titleOf(up)}. ` : "") + pick(PRAISE) + " Your LinkedIn draft is ready.", 5200); confetti(); }
+}
+function confetti() { const cols = ["#1c8454","#7fc7a1","#d99a2b","#3a7bd5","#d9604f","#0d4d33"];
+  for (let n = 0; n < 40; n++) { const e = document.createElement("i"); e.className = "conf"; e.style.left = Math.random()*100 + "vw"; e.style.background = cols[n % cols.length]; e.style.animationDelay = (Math.random()*0.5) + "s"; e.style.animationDuration = (1.4 + Math.random()) + "s"; document.body.appendChild(e); setTimeout(() => e.remove(), 3200); } }
+
+// ---------- router and events ----------
+function route(keepScroll) {
+  const h = location.hash.slice(1) || "dashboard", [p, a, b, c] = h.split("/"); let html;
+  switch (p) { case "week": html = vWeek(+a); break; case "day": html = vRoom(+a, +b, c); break; case "tasks": html = vTasks(); break; case "calendar": html = vCalendar(); break; case "roadmap": html = vRoadmap(); break; case "analytics": html = vAnalytics(); break;
+    case "notes": html = vNotes(); break; case "posts": html = vPosts(); break; case "coach": html = vCoach(); break; case "books": html = vBooks(); break; case "id": html = vId(); break;
+    case "settings": html = vSettings(); break; case "help": html = vHelp(); break; case "search": html = vSearch(decodeURIComponent(a || "")); break; default: html = vDashboard(); }
+  $("#view").innerHTML = html; paintNav(p === "week" ? "roadmap" : p === "day" ? "tasks" : p); paintChrome(); if (!keepScroll) scrollTo(0, 0);
+}
+document.addEventListener("change", e => { const t = e.target;
+  if (t.dataset.k) { setDone(t.dataset.k, t.checked); route(true); }
+  if (t.dataset.know) { const [key, i] = t.dataset.know.split("|"); S.know[key] = S.know[key] || []; S.know[key][+i] = t.checked; save(); roomProgress(key); if (t.checked) markActive(); }
+  if (t.dataset.built) { S.built[t.dataset.built] = t.checked; save(); roomProgress(t.dataset.built); }
+  if (t.dataset.book) { S.books[t.dataset.book] = t.checked; save(); if (t.checked) toast("Book finished. Your learning capacity just grew."); }
+  if (t.dataset.posted) { S.posts[t.dataset.posted].posted = t.checked; save(); route(true); }
+});
+document.addEventListener("input", e => { const t = e.target;
+  if (t.dataset.n) { const [w, i] = t.dataset.n.slice(1).split("d").map(Number), was = (S.notes[t.dataset.n]||"").trim(); S.notes[t.dataset.n] = t.value; refreshDayPost(w, i); save(); paintChrome(); roomProgress(t.dataset.n); if (!was && t.value.trim() && S.done[t.dataset.n]) toast("Writing down what was hard is what makes it stick. Well done."); }
+  if (t.dataset.r) { const w = +location.hash.split("/")[1], had = reflOk(w); S.refl[w] = S.refl[w] || {}; S.refl[w][t.dataset.r] = t.value; refreshWeekPost(w); save(); if (!had && reflOk(w)) toast("Reflection complete: +20 points. This habit is a superpower."); }
+  if (t.dataset.post) { const p = S.posts[t.dataset.post]; p.text = t.value; p.edited = true; save(); }
+  if (t.id === "nm") { S.name = t.value; save(); paintChrome(); }
+  if (t.id === "nq") { vNotes.q = t.value; const p = t.selectionStart; route(true); const n = $("#nq"); n.focus(); n.setSelectionRange(p, p); }
+});
+document.addEventListener("click", e => { const t = e.target.closest("button,[data-lesson],[data-copy]") || e.target;
+  const cp = txt => navigator.clipboard.writeText(txt).then(() => toast("Copied. Paste it where you need it.", 2200));
+  if (t.dataset.lesson) { const x = DAYS[t.dataset.lesson]; cp(`I have 45 minutes. Teach me these things in simple English, one at a time: ${x.k.join("; ")}.\nFor each: a 3-line explanation, one tiny example I can run, and one common mistake. Then quiz me, one question at a time, with no hints before I answer. Stay consistent with this source: ${x.s}`); }
+  if (t.dataset.copy) cp($("#" + t.dataset.copy).textContent);
+  if (t.dataset.copypost) cp(S.posts[t.dataset.copypost].text);
+  if (t.dataset.res) { const [key, i] = t.dataset.res.split("|"); S.last[key] = +i; save(); $("#reader").innerHTML = readerHtml(key, +i); document.querySelectorAll(".res-btn").forEach((b, j) => b.classList.toggle("on", j === +i)); }
+  if (t.dataset.mkprompt) { const key = t.dataset.mkprompt, x = DAYS[key], code = ($("#chkcode") || {}).value || "";
+    if (!code.trim()) { toast("Paste your working code first."); return; }
+    fetch("/api/check-prompt", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ day:key, task:x.build, know:x.k, result:x.out, code, output:($("#chkout") || {}).value || "" }) })
+      .then(r => r.ok ? r.json() : Promise.reject()).then(j => navigator.clipboard.writeText(j.prompt).then(() => toast(`Prompt copied (${j.prompt.length} characters). Now open DeepSeek or Qwen and paste it.`, 6000))).catch(() => toast("Could not make the prompt. Is the Future Lab server running?")); }
+  if (t.dataset.popai) { const url = { deepseek:"https://chat.deepseek.com/", qwen:"https://chat.qwen.ai/" }[t.dataset.popai];
+    const w = window.open(url, "futurelab_ai", `popup=yes,width=560,height=840,left=${Math.max(0, screen.availWidth - 580)},top=40`); if (!w) { toast("Pop-up blocked: allow pop-ups for localhost, then try again."); window.open(url, "_blank", "noopener"); } }
+  if (t.dataset.aitab) { const key = t.dataset.aitab; $("#reader").innerHTML = `<div class="bar2"><b style="flex:1">DeepSeek chat</b><button class="btn sm soft" data-backread="${key}">Back to reading</button><a class="btn sm soft" href="https://chat.deepseek.com/" target="_blank" rel="noopener">Open in new tab &#8599;</a></div><div class="small mute" style="padding:6px 14px">If you see a robot check, a blank page or a login loop, use the "Open DeepSeek" pop-out button instead (sites can refuse to run inside another page).</div><iframe src="https://chat.deepseek.com/" title="DeepSeek chat" allow="clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>`; }
+  if (t.dataset.backread) { const key = t.dataset.backread; $("#reader").innerHTML = readerHtml(key, Math.min(S.last[key] || 0, Math.max(linksOf(key).length - 1, 0))); }
+  if (t.dataset.verdict) { const [key, v] = t.dataset.verdict.split("|"); S.checks[key] = { verdict:v, date:today() };
+    if (v === "correct") { S.built[key] = true; S.verified[key] = true; markActive(); const cb = document.querySelector("[data-built]"); if (cb) cb.checked = true; toast("AI check passed. You built it, and it is verified. " + pick(PRAISE), 5000); confetti(); }
+    else toast(v === "partly" ? "Close. Use the hint, fix it, run it again, and check again." : "Not yet. Read the problems it listed, fix one thing, run it, and try again. This is where learning happens.", 6000);
+    save(); const r = $("#chkres"); if (r) r.innerHTML = `Last check: <b>${esc(v)}</b> on ${esc(today())}`; roomProgress(key); }
+  if (["updbtn", "updbtn2"].includes(t.id)) { fetch("/api/update", { method:"POST" }).then(r => r.json()).then(j => { toast(j.msg || ({ "not-a-repo":"Updates need the app folder to be a git repo. See Settings.", "no-remote":"No update source yet. Connect the FutureLab repo.", error:"Update failed: " + (j.msg || "") })[j.state] || "Done", 6000); if (j.updated) setTimeout(() => location.reload(), j.restart ? 3500 : 1500); pollUpd(); }).catch(() => toast("Server is not running.")); }
+  if (t.dataset.nlm) cp(linksOf(t.dataset.nlm).map(linkUrl).join("\n"));
+  if (t.dataset.finish) { const key = t.dataset.finish, x = DAYS[key], kn = S.know[key] || [], nk = x.k.filter((_, i) => kn[i]).length;
+    if ((nk < x.k.length || !S.built[key]) && !t.dataset.warn) { t.dataset.warn = "1"; t.textContent = "Finish anyway"; toast("Some items are not ticked yet. Click again to finish anyway, or go back and tick them honestly.", 5000); }
+    else { setDone(key, true); route(true); } }
+  if (t.dataset.undo) { bump(() => { S.done[t.dataset.undo] = false; }); route(true); }
+  if (t.dataset.rest) { const wk = isoWeekKey(new Date()); if ((S.rest||[]).some(r => isoWeekKey(new Date(r + "T00:00:00")) === wk)) toast("You already used this week's rest day."); else { S.rest = [...(S.rest||[]), today()]; save(); toast("Rest day taken. Your streak is safe. Rest is part of learning."); route(true); } }
+  if (["syncbtn","syncbtn2","syncbtn3"].includes(t.id)) { fetch("/api/sync", { method:"POST" }).then(() => { toast("Syncing to GitHub..."); setTimeout(pollGh, 4000); }).catch(() => toast("Server is not running.")); }
+  if (t.id === "startbtn") { if (!S.timer.running) { S.timer.startedAt = Date.now(); S.timer.running = true; save(); } const nt = nextTask(); location.hash = nt.d ? `day/${nt.w}/${nt.d}` : `week/${nt.w}`; }
+  if (t.id === "tpp") timerToggle();
+  if (t.id === "tstop") timerStop();
+  if (t.id === "trec") { const w = +location.hash.split("/")[1], k = WK[w-1], did = $("#tdo").checked, sc = +$("#tsc").value, need = Math.ceil(k.testAsk.length*0.75), ok = did && sc >= need;
+    const up = bump(() => { S.tests[w] = { did, score: sc, passed: ok, date: ok ? new Date().toISOString() : (S.tests[w]||{}).date }; if (ok) { markActive(); refreshWeekPost(w); } });
+    if (ok) { toast((up ? `LEVEL UP! Level ${up}: ${titleOf(up)}. ` : "") + pick(TESTPASS) + " Your week post is in LinkedIn.", 6000); route(true); }
+    else $("#tmsg").textContent = did ? `Not yet: ${sc}/${k.testAsk.length}. Re-read the weak spots and try again tomorrow. No shame in a retake.` : "Do the practical task first, without AI help, then record the result."; }
+});
+$("#q").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.value.trim()) location.hash = "search/" + encodeURIComponent(e.target.value.trim()); });
+document.addEventListener("keydown", e => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "f") { e.preventDefault(); $("#q").focus(); } });
+$("#ic-search").innerHTML = ic("search"); $("#ic-mail").innerHTML = ic("mail", 20); $("#ic-bell").innerHTML = ic("bell", 20);
+window.addEventListener("hashchange", () => route());
+load().then(() => { route(); pollGh(); pollUpd(); setInterval(pollGh, 15000); setInterval(pollUpd, 6 * 3600 * 1000); });
+</script>
+</body>
+</html>
