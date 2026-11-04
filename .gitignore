@@ -9,3 +9,4 @@ server.log
 .DS_Store
 Future Lab.app/
 .claude/
+data_path.local

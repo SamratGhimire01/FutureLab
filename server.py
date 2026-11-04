@@ -8,7 +8,18 @@ from datetime import datetime
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.environ.get("FUTURELAB_DATA") or os.path.normpath(os.path.join(HERE, "..", "..", "FutureLab_data"))
+def _data_dir():  # every launcher routes through here, so the folder is found the same way for all of them
+    if os.environ.get("FUTURELAB_DATA"):
+        return os.environ["FUTURELAB_DATA"]
+    try:  # your own path, remembered locally; git-ignored so it never reaches the public repo
+        line = open(os.path.join(HERE, "data_path.local")).read().strip()
+        if line: return line
+    except OSError:
+        pass
+    return os.path.normpath(os.path.join(HERE, "..", "..", "FutureLab_data"))
+
+
+DATA = _data_dir()
 PROG = os.path.join(DATA, "progress.json")
 PORT = int(os.environ.get("FUTURELAB_PORT", "8765"))
 OK_HOSTS = {f"127.0.0.1:{PORT}", f"localhost:{PORT}"}
