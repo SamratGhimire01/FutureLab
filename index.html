@@ -462,6 +462,7 @@ function vRoom(w, d, ri) {
         <textarea id="chkcode" placeholder="Paste your code here" style="min-height:120px;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea>
         <textarea id="chkout" placeholder="What it printed when you ran it (optional)" style="min-height:60px;margin-top:6px"></textarea>
         <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn pri sm" data-mkprompt="${key}">Make prompt and copy</button><button class="btn soft sm" data-popai="deepseek">Open DeepSeek</button><button class="btn soft sm" data-popai="qwen">Open Qwen</button><button class="btn soft sm" data-aitab="${key}">Try DeepSeek in this window</button></div>
+        <div id="chkfb" style="margin-top:8px"></div>
         <div class="small" style="margin-top:8px">The AI said: <button class="btn soft sm" data-verdict="${key}|correct">Correct</button> <button class="btn soft sm" data-verdict="${key}|partly">Partly</button> <button class="btn soft sm" data-verdict="${key}|wrong">Wrong</button></div>
         <div class="small" id="chkres" style="margin-top:6px">${S.checks[key] ? `Last check: <b>${esc(S.checks[key].verdict)}</b> on ${esc(S.checks[key].date)}` : ""}</div>
         <p class="small mute">The AI reads your code but cannot run it. Your own run is the real proof. The verdict is what you report, so be honest. Qwen cannot be shown inside this window (it blocks that), so it opens in its own window.</p></details></div>
@@ -508,6 +509,14 @@ document.addEventListener("input", e => { const t = e.target;
 });
 document.addEventListener("click", e => { const t = e.target.closest("button,[data-lesson],[data-copy]") || e.target;
   const cp = txt => navigator.clipboard.writeText(txt).then(() => toast("Copied. Paste it where you need it.", 2200));
+  const showPrompt = txt => {  // clipboard refused: never lose the prompt, put it on the page so it can be copied by hand
+    toast("Copy failed. The prompt is on the page below: select it and copy it yourself.", 7000);
+    const fb = $("#chkfb"); if (!fb) return;
+    fb.innerHTML = '<div class="small" style="margin-bottom:4px"><b>Copy failed.</b> Your browser blocked the clipboard. Press "Select all", copy with Cmd+C, then paste into DeepSeek or Qwen.</div>'
+      + '<textarea id="chkprompt" readonly style="min-height:160px;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea>'
+      + '<div style="margin-top:6px"><button class="btn soft sm" data-selprompt="1">Select all</button></div>';
+    $("#chkprompt").value = txt;  // assigned, never interpolated: the prompt holds the learner's code and the answer key
+  };
   if (t.dataset.lesson) { const x = DAYS[t.dataset.lesson]; cp(`I have 45 minutes. Teach me these things in simple English, one at a time: ${x.k.join("; ")}.\nFor each: a 3-line explanation, one tiny example I can run, and one common mistake. Then quiz me, one question at a time, with no hints before I answer. Stay consistent with this source: ${x.s}`); }
   if (t.dataset.copy) cp($("#" + t.dataset.copy).textContent);
   if (t.dataset.copypost) cp(S.posts[t.dataset.copypost].text);
@@ -515,7 +524,12 @@ document.addEventListener("click", e => { const t = e.target.closest("button,[da
   if (t.dataset.mkprompt) { const key = t.dataset.mkprompt, x = DAYS[key], code = ($("#chkcode") || {}).value || "";
     if (!code.trim()) { toast("Paste your working code first."); return; }
     fetch("/api/check-prompt", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ day:key, task:x.build, know:x.k, result:x.out, code, output:($("#chkout") || {}).value || "" }) })
-      .then(r => r.ok ? r.json() : Promise.reject()).then(j => navigator.clipboard.writeText(j.prompt).then(() => toast(`Prompt copied (${j.prompt.length} characters). Now open DeepSeek or Qwen and paste it.`, 6000))).catch(() => toast("Could not make the prompt. Is the Future Lab server running?")); }
+      .then(r => r.ok ? r.json() : Promise.reject(new Error("server")))
+      .then(j => Promise.resolve().then(() => navigator.clipboard.writeText(j.prompt))  // may throw outright on a blocked clipboard
+        .then(() => { const fb = $("#chkfb"); if (fb) fb.innerHTML = ""; toast(`Prompt copied (${j.prompt.length} characters). Now open DeepSeek or Qwen and paste it.`, 6000); })
+        .catch(() => showPrompt(j.prompt)))          // the prompt was built fine, only the copy failed
+      .catch(e => { if (e && e.message === "server") toast("Could not make the prompt. Is the Future Lab server running?", 6000); }); }
+  if (t.dataset.selprompt) { const ta = $("#chkprompt"); if (ta) { ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length); } }
   if (t.dataset.popai) { const url = { deepseek:"https://chat.deepseek.com/", qwen:"https://chat.qwen.ai/" }[t.dataset.popai];
     const w = window.open(url, "futurelab_ai", `popup=yes,width=560,height=840,left=${Math.max(0, screen.availWidth - 580)},top=40`); if (!w) { toast("Pop-up blocked: allow pop-ups for localhost, then try again."); window.open(url, "_blank", "noopener"); } }
   if (t.dataset.aitab) { const key = t.dataset.aitab; $("#reader").innerHTML = `<div class="bar2"><b style="flex:1">DeepSeek chat</b><button class="btn sm soft" data-backread="${key}">Back to reading</button><a class="btn sm soft" href="https://chat.deepseek.com/" target="_blank" rel="noopener">Open in new tab &#8599;</a></div><div class="small mute" style="padding:6px 14px">If you see a robot check, a blank page or a login loop, use the "Open DeepSeek" pop-out button instead (sites can refuse to run inside another page).</div><iframe src="https://chat.deepseek.com/" title="DeepSeek chat" allow="clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>`; }

@@ -9,9 +9,10 @@ USE IT
   Dashboard > Start today > Study room: click a link or video and it opens right there. Tick the must-know items, build, write a note, Finish.
   Pages that refuse to be shown inside another app open in a new tab (the room tells you).
 
-BACK UP TO GITHUB (once; asks before creating a PRIVATE repo "future-lab-data"; needs: brew install gh)
+BACK UP TO GITHUB (once; asks before creating a PUBLIC repo "FutureLab-data"; needs: brew install gh)
+  PUBLIC is deliberate: each push is a commit, so your study days show on your contribution graph. Anyone can also read your notes.
   bash setup_github.sh
-  Data lives in ../../FutureLab_data (its own git repo): progress.json, notes.md, linkedin/ drafts. Pushed ~20 s after each save.
+  Data lives in its own git repo, set by FUTURELAB_DATA (or the git-ignored data_path.local file): progress.json, notes.md, linkedin/ drafts. Pushed ~20 s after each save.
 
 CHANGE THE PLAN
   curriculum.js and days_*.js hold the text. links.js holds the verified links (generated; ask Claude to refresh it).
